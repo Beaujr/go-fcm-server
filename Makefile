@@ -15,7 +15,7 @@ DOCKERFILES := build
 # Go build flags
 GOOS := linux
 GOARCH := amd64
-GIT_COMMIT := $(shell git rev-parse HEAD)
+GIT_COMMIT := $(shell git rev-parse --short HEAD)
 GOLDFLAGS := -ldflags "-X $(PACKAGE_NAME)/pkg/util.AppGitCommit=${GIT_COMMIT} -X $(PACKAGE_NAME)/pkg/util.AppVersion=${IMAGE_TAG}"
 
 .PHONY: verify build docker_build push generate generate_verify \
