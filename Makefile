@@ -83,10 +83,10 @@ docker_run:
 
 docker_push: docker-login
 	set -e; \
-	docker tag $(REGISTRY)/$(APP_NAME):$(BUILD_TAG) $(APP_NAME):$(IMAGE_TAG)-$(GOARCH)-$(GIT_SHORT_COMMIT) ; \
-	docker push $(APP_NAME):$(IMAGE_TAG)-$(GOARCH)-$(GIT_SHORT_COMMIT);
+	docker tag $(REGISTRY)/$(APP_NAME):$(BUILD_TAG) $(APP_NAME):$(IMAGE_TAG)-$(GOARCH)-$(GIT_COMMIT) ; \
+	docker push $(APP_NAME):$(IMAGE_TAG)-$(GOARCH)-$(GIT_COMMIT);
 ifeq ($(GITHUB_HEAD_REF),master)
-	docker tag $(APP_NAME):$(IMAGE_TAG)-$(GOARCH)-$(GIT_SHORT_COMMIT) $(APP_NAME):latest_$(GOARCH)
+	docker tag $(APP_NAME):$(IMAGE_TAG)-$(GOARCH)-$(GIT_COMMIT) $(APP_NAME):latest_$(GOARCH)
 	docker push $(APP_NAME):latest_$(GOARCH)
 endif
 
