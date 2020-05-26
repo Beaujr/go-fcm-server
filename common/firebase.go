@@ -32,7 +32,7 @@ func NewClient() *FirebaseClient {
 func (c *FirebaseClient) SendToTopic(ctx context.Context, topic string, notification messaging.Notification) error {
 	message := &messaging.Message{
 		Notification: &notification,
-		Topic: topic,
+		Topic:        topic,
 	}
 
 	// Send a message to the devices subscribed to the provided topic.
@@ -40,7 +40,6 @@ func (c *FirebaseClient) SendToTopic(ctx context.Context, topic string, notifica
 	if err != nil {
 		return err
 	}
-
 
 	fmt.Println("Successfully sent message:", response)
 	return nil

@@ -34,6 +34,7 @@ verify: generate_verify go_verify
 go_verify: go_fmt go_test
 
 go_mod:
+	go mod tidy
 	go mod vendor
 
 go_fcm_server:

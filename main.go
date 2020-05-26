@@ -9,9 +9,10 @@ import (
 	"log"
 	"net/http"
 )
+
 var port = flag.Int("port", 10001, "Set Port")
 
-func main(){
+func main() {
 	flag.Parse()
 	fmt.Println(fmt.Sprintf("Server Started on Port:%d", *port))
 	myRouter := mux.NewRouter().StrictSlash(true)
