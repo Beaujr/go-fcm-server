@@ -8,6 +8,7 @@ BUILD_TAG := build
 BINPATH := ./bin
 NAMESPACE := default
 PORT := 1234
+PLATFORM := linux/amd64,linux/arm/v7,linux/arm/v6,linux/arm64
 
 # Path to dockerfiles directory
 DOCKERFILES := build
@@ -69,15 +70,15 @@ go_fmt:
 
 # Docker targets
 ################
-docker_build:
-	docker build \
-		--build-arg VCS_REF=$(GIT_COMMIT) \
-		--build-arg GOARCH=$(GOARCH) \
-		--build-arg GOOS=$(GOOS) \
-		--build-arg APP_NAME=$(REPO_NAME) \
-		-t $(REGISTRY)/$(APP_NAME):$(BUILD_TAG) \
-		-f $(DOCKERFILES)/Dockerfile \
-		./
+#docker_build:
+#	docker build \
+#		--build-arg VCS_REF=$(GIT_COMMIT) \
+#		--build-arg GOARCH=$(GOARCH) \
+#		--build-arg GOOS=$(GOOS) \
+#		--build-arg APP_NAME=$(REPO_NAME) \
+#		-t $(REGISTRY)/$(APP_NAME):$(BUILD_TAG) \
+#		-f $(DOCKERFILES)/Dockerfile \
+#		./
 
 docker_run:
 	@docker run -p $(PORT):$(PORT) -v $(shell pwd)/config:/config $(REGISTRY)/$(APP_NAME):$(BUILD_TAG) -port=$(PORT)
@@ -99,6 +100,20 @@ else
 	$(error DOCKER_PASS is undefined)
   endif
 endif
+
+docker_build: DOCKERFILE=Dockerfile
+docker_build: PUSH=true
+docker_build: TYPE=image
+docker_build:
+	docker buildx build \
+		--build-arg VCS_REF=$(GIT_COMMIT) \
+		--build-arg APP_NAME=$(REPO_NAME) \
+		--tag $(REGISTRY)/$(APP_NAME):$(BUILD_TAG) \
+		--platform $(PLATFORM) \
+		--output "type=$(TYPE),push=$(PUSH)" \
+		--file $(DOCKERFILES)/$(DOCKERFILE) \
+		./
+
 
 docker-login: check-docker-credentials
 	@docker login -u $(DOCKER_USER) -p $(DOCKER_PASS) $(REGISTRY)
